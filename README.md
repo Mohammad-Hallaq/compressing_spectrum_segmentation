@@ -58,9 +58,9 @@ ipython kernel install --user --name=spectrogram-compression
 ```
 
 
-7. Open the notebook, `spectrogram_segmentation.ipynb`, specifying to use the `spectrogram-segmentation` kernel:
+7. Open the notebook, `spectrogram_compression.ipynb`, specifying to use the `spectrogram-compression` kernel:
 ```commandline
-jupyter notebook spectrogram_segmentation.ipynb --MultiKernelManager.default_kernel_name=spectrogram-segmentation
+jupyter notebook spectrogram_compression.ipynb --MultiKernelManager.default_kernel_name=spectrogram-compression
 ```
 
 
@@ -76,7 +76,7 @@ menu and selecting "Interrupt Kernel" or by pressing `Ctrl + C` in the terminal 
 9. After you finish exploring, consider removing the dataset from your system and deleting the Conda environment to 
 free up space. You can delete the Conda environment using the following command:
 ```commandline
-conda env remove --name spectrogram-segmentation
+conda env remove --name spectrogram-compression
 ```
 
 <!-- ### Running this example in Google Colab

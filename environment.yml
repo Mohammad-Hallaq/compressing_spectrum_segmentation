@@ -1,4 +1,4 @@
-name: spectrogram-segmentation
+name: spectrogram-compression
 channels:
   - pytorch
   - nvidia

@@ -106,7 +106,7 @@ These methods can also be combined using a weighted loss function to balance the
 
 Below is a visual representation of the structured pruning algorithm and retraining process:
 
-![Pruning Algorithm and Retraining](\docs\images\methodology.png)
+![Pruning Algorithm and Retraining](docs/images/methodology.png)
 
 
 ## 📊 Output

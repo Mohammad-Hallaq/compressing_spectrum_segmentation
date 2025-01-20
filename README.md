@@ -1,44 +1,33 @@
-# Spectrogram Segmentation
+# Spectrogram Segmentation with Compression
 
-The successful application of [semantic segmentation](https://www.ibm.com/topics/semantic-segmentation) to radiofrequency (RF) spectrograms holds significant applications 
-for [spectrum sensing](https://iopscience.iop.org/article/10.1088/1742-6596/2261/1/012016#:~:text=In%20cognitive%20radio%2C%20spectrum%20sensing,user%20can%20use%20the%20spectrum.) and serves as a foundational example showcasing the near-term feasibility of 
-[intelligent radio](https://www.qoherent.ai/intelligentradio/) technology.
+The successful application of [semantic segmentation](https://www.ibm.com/topics/semantic-segmentation) to radiofrequency (RF) spectrograms holds significant applications for [spectrum sensing](https://iopscience.iop.org/article/10.1088/1742-6596/2261/1/012016#:~:text=In%20cognitive%20radio%2C%20spectrum%20sensing,user%20can%20use%20the%20spectrum.) and serves as a foundational example showcasing the near-term feasibility of [intelligent radio](https://www.qoherent.ai/intelligentradio/) technology.
 
-In this example, we use [PyTorch](https://pytorch.org/) and [Lightning](https://lightning.ai/docs/pytorch/stable/) to train a segmentation model to identify and
-differentiate between 5G NR and 4G LTE signals within wideband spectrograms.
+In this extended work, we build on the original spectrogram segmentation model by incorporating advanced **model compression techniques**, including **pruning** and **knowledge distillation**, to create a more efficient and lightweight version of the model. These techniques are essential for deploying models in resource-constrained environments, such as IoT devices, while maintaining high performance.
 
-Qoherent's mission to drive the creation of intelligent radio technology requires a combination of open-source and 
-proprietary tools. This example, which leverages open-source tools and machine learning frameworks to train on 
-synthetic radio data generated using MATLAB, showcases our commitment to interoperability and our tool-agnostic 
-approach to innovation.
+This project uses [PyTorch](https://pytorch.org/) and [Lightning](https://lightning.ai/docs/pytorch/stable/) to train and compress a segmentation model that identifies and differentiates between 5G NR and 4G LTE signals within wideband spectrograms. The compression techniques applied significantly reduce the model's size and computational requirements without compromising accuracy.
 
-Classification results are comparable to those reported by MathWorks' AI-based network. For more information, 
-please refer to the following article by MathWorks:
-[Spectrum Sensing with Deep Learning to Identify 5G and LTE Signals](https://www.mathworks.com/help/comm/ug/spectrum-sensing-with-deep-learning-to-identify-5g-and-lte-signals.html).
+Qoherent's mission to drive the creation of intelligent radio technology requires a combination of open-source and proprietary tools. This example leverages open-source tools and machine learning frameworks to train on synthetic radio data generated using MATLAB. Additionally, it showcases our commitment to interoperability and tool-agnostic innovation by demonstrating how model compression techniques can make intelligent radio solutions more feasible for practical deployment.
+
+Classification results are comparable to those reported by MathWorks' AI-based network, and the compression methods provide significant reductions in model size and inference time. For more information, please refer to the following article by MathWorks: [Spectrum Sensing with Deep Learning to Identify 5G and LTE Signals](https://www.mathworks.com/help/comm/ug/spectrum-sensing-with-deep-learning-to-identify-5g-and-lte-signals.html).
 
 If you found this example interesting or helpful, don't forget to give it a star! ⭐
 
+---
 
 ## 🚀 Getting Started
 
-This example is provided as a Jupyter Notebook. You have the option to either run this example locally or in Google 
-Colab.
-
-To run this example locally, you'll need to download the project and dataset and set up a Conda 
-virtual environment. If this seems daunting, we recommend running this example on Google Colab.
+This project provides examples in Jupyter Notebooks to demonstrate both the original segmentation model and the compressed model. You can run the notebooks locally or on Google Colab.
 
 ### Running this example locally
 
-Please note that running this example locally will require approximately 10 GB of free space. Please ensure you 
-have sufficient space available prior to proceeding.
+Please note that running this example locally will require approximately 10 GB of free space. Ensure you have sufficient space available prior to proceeding.
 
-1. Ensure that [Git](https://git-scm.com/downloads) and [Conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) are installed on the computer where you plan to run this example. 
-Additionally, if you'd like to accelerate model training with a GPU, you'll require [CUDA](https://docs.nvidia.com/cuda/cuda-quick-start-guide/index.html).
-
+1. Ensure that [Git](https://git-scm.com/downloads) and [Conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) are installed on the computer where you plan to run this example. Additionally, if you'd like to accelerate model training with a GPU, you'll require [CUDA](https://docs.nvidia.com/cuda/cuda-quick-start-guide/index.html).
 
 2. Clone this repository to your local computer:
 ```commandline
-git clone https://github.com/qoherent/spectrogram-segmentation.git
+git clone https://github.com/Mohammad-Hallaq/spectrogram-compression
+
 ```
 
 
@@ -46,12 +35,12 @@ git clone https://github.com/qoherent/spectrogram-segmentation.git
 ```commandline
 conda env create -f environment.yml
 ```
-This will create a new Conda environment named `spectrogram-segmentation` within the Conda installation directory.
+This will create a new Conda environment named `spectrogram-compression` within the Conda installation directory.
 
 
 4. Active the environment:
 ```commandline
-conda activate spectrogram-segmentation
+conda activate spectrogram-compression
 ```
 
 
@@ -65,7 +54,7 @@ MathWorks Spectrum Sensing dataset will be downloaded and unpacked into this dir
 
 6. Register the environment kernel with Jupyter:
 ```commandline
-ipython kernel install --user --name=spectrogram-segmentation
+ipython kernel install --user --name=spectrogram-compression
 ```
 
 
@@ -90,10 +79,43 @@ free up space. You can delete the Conda environment using the following command:
 conda env remove --name spectrogram-segmentation
 ```
 
-### Running this example in Google Colab
+<!-- ### Running this example in Google Colab
 
 **Coming soon:** Don't want the hassle of downloading the project and dataset and setting up a Conda environment? 
 We've shared the notebook on Google Colab: [Spectrogram Segmentation]().
+ -->
+
+## 🔧 Compression Techniques
+
+This project applies the following advanced techniques to enhance the model's efficiency:
+
+### Structured Pruning
+
+The structured pruning process evaluates the importance of each model block based on metrics such as loss, parameter count, and MACs (Multiply-Accumulate Operations). It determines pruning ratios dynamically using a combination of weighted importance scores and exponential decay. This approach ensures that the least critical parts of the model are removed while retaining performance.
+
+### Retraining the Pruned Model
+
+After pruning, the retraining step ensures the model regains performance. This step can be performed using:
+- **Conventional Fine-Tuning**: Adjusting the pruned model on the training dataset.
+- **Knowledge Distillation**: Transferring knowledge from a larger "teacher" model to the pruned "student" model.
+- **Self-Knowledge Distillation**: Allowing the model to distill knowledge from its own predictions over multiple iterations.
+
+These methods can also be combined using a weighted loss function to balance their contributions during retraining.
+
+### Visual Representation
+
+Below is a visual representation of the structured pruning algorithm and retraining process:
+
+![Pruning Algorithm and Retraining](\docs\images\methodology.png)
+
+
+## 📊 Output
+
+This work introduces an effective compression framework that significantly reduces the size and complexity of deep learning models while maintaining high performance, specifically for spectrum segmentation tasks. Through structured pruning, guided by gradient-based importance scoring, we can achieve remarkable reduction in model size, in parameters count, and in MACs. Additionally, inference latency is improved, making the compressed model well-suited for deployment in edge devices with limited computational resources.
+
+Our experiments show that knowledge distillation alone is highly effective for retraining the pruned model, maintaining robustness and generalization without requiring labelled data. This eliminates a significant barrier to scalability, particularly in scenarios where labelled data is scarce or unavailable. We can also explore self-knowledge distillation through this work. 
+
+The proposed framework demonstrates its suitability for real-world wireless communication applications, offering a scalable and efficient solution for 6G and IoT environments.
 
 
 ## 🤝 Contribution
@@ -112,8 +134,9 @@ Finally, be sure to check out our open-source project: [RIA Core](https://github
 
 
 ## 🖊️ Authorship
+This work is an extension of the work by the Qoherent team, with contributions in compression techniques by [Mohammad](https://github.com/Mohammad-Hallaq).
 
-This work is a product of the collaborative efforts of the Qoherent team. Of special mention are [Wan](https://github.com/wan-sdr), 
+The original work on spectrum segmentation is a product of the collaborative efforts of the Qoherent team. Of special mention are [Wan](https://github.com/wan-sdr), 
 [Madrigal](https://github.com/MadrigalDW), [Dimitrios](https://github.com/DimitriosK), and [Michael](https://github.com/mrl280).
 
 
